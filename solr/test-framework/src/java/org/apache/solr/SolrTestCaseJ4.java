@@ -91,6 +91,7 @@ import org.apache.lucene.tests.util.LuceneTestCase.SuppressSysoutChecks;
 import org.apache.lucene.tests.util.TestUtil;
 import org.apache.lucene.util.Constants;
 import org.apache.solr.client.solrj.ResponseParser;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.embedded.JettyConfig;
 import org.apache.solr.client.solrj.embedded.JettySolrRunner;
 import org.apache.solr.client.solrj.impl.CloudHttp2SolrClient;
@@ -2874,7 +2875,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(
+  public static SolrClient getSolrClient(
       String url, HttpClient httpClient, ResponseParser responseParser, boolean compression) {
     return new Builder(url)
         .withHttpClient(httpClient)
@@ -2888,7 +2889,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(
+  public static SolrClient getSolrClient(
       String url, HttpClient httpClient, ResponseParser responseParser) {
     return new Builder(url).withHttpClient(httpClient).withResponseParser(responseParser).build();
   }
@@ -2898,7 +2899,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(String url, HttpClient httpClient) {
+  public static SolrClient getSolrClient(String url, HttpClient httpClient) {
     return new Builder(url).withHttpClient(httpClient).build();
   }
 
@@ -2907,7 +2908,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(
+  public static SolrClient getSolrClient(
       String url, HttpClient httpClient, int connectionTimeoutMillis) {
     return new Builder(url)
         .withHttpClient(httpClient)
@@ -2920,7 +2921,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(String url) {
+  public static SolrClient getSolrClient(String url) {
     return new Builder(url).build();
   }
 
@@ -2929,7 +2930,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(String url, int connectionTimeoutMillis) {
+  public static SolrClient getSolrClient(String url, int connectionTimeoutMillis) {
     return new Builder(url).withConnectionTimeout(connectionTimeoutMillis).build();
   }
 
@@ -2938,7 +2939,7 @@ public abstract class SolrTestCaseJ4 extends SolrTestCase {
    * not wish to have any randomized behavior should use the {@link
    * org.apache.solr.client.solrj.impl.HttpSolrClient.Builder} class directly
    */
-  public static HttpSolrClient getHttpSolrClient(
+  public static SolrClient getSolrClient(
       String url, int connectionTimeoutMillis, int socketTimeoutMillis) {
     return new Builder(url)
         .withConnectionTimeout(connectionTimeoutMillis)
