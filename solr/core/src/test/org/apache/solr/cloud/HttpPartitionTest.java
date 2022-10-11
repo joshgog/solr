@@ -476,19 +476,19 @@ public class HttpPartitionTest extends AbstractFullDistribZkTestBase {
     if (log.isInfoEnabled()) {
       log.info("Sending doc 2 to old leader {}", leader.getName());
     }
-    try (SolrClient leaderSolr = getHttpSolrClient(leader, testCollectionName)) {
+    try (SolrClient leaderSolr = getSolrClient(leader, testCollectionName)) {
 
       leaderSolr.add(doc);
       leaderSolr.close();
 
       // if the add worked, then the doc must exist on the new leader
-      try (SolrClient newLeaderSolr = getHttpSolrClient(currentLeader, testCollectionName)) {
+      try (SolrClient newLeaderSolr = getSolrClient(currentLeader, testCollectionName)) {
         assertDocExists(newLeaderSolr, "2");
       }
 
     } catch (SolrException exc) {
       // this is ok provided the doc doesn't exist on the current leader
-      try (SolrClient client = getHttpSolrClient(currentLeader, testCollectionName)) {
+      try (SolrClient client = getSolrClient(currentLeader, testCollectionName)) {
         client.add(doc); // this should work
       }
     }
@@ -537,11 +537,11 @@ public class HttpPartitionTest extends AbstractFullDistribZkTestBase {
       throws Exception {
     Replica leader =
         ZkStateReader.from(cloudClient).getLeaderRetry(testCollectionName, "shard1", 10000);
-    SolrClient leaderSolr = getHttpSolrClient(leader, testCollectionName);
+    SolrClient leaderSolr = getSolrClient(leader, testCollectionName);
     List<SolrClient> replicas = new ArrayList<SolrClient>(notLeaders.size());
 
     for (Replica r : notLeaders) {
-      replicas.add(getHttpSolrClient(r, testCollectionName));
+      replicas.add(getSolrClient(r, testCollectionName));
     }
     try {
       for (int d = firstDocId; d <= lastDocId; d++) {
@@ -561,10 +561,10 @@ public class HttpPartitionTest extends AbstractFullDistribZkTestBase {
     }
   }
 
-  protected SolrClient getHttpSolrClient(Replica replica, String coll) {
+  protected SolrClient getSolrClient(Replica replica, String coll) {
     ZkCoreNodeProps zkProps = new ZkCoreNodeProps(replica);
     String url = zkProps.getBaseUrl() + "/" + coll;
-    return getHttpSolrClient(url);
+    return getSolrClient(url);
   }
 
   // Send doc directly to a server (without going through proxy)

@@ -54,7 +54,7 @@ public class SolrCloudScraper extends SolrScraper {
 
   @Override
   public Map<String, MetricSamples> pingAllCores(MetricsQuery query) throws IOException {
-    Map<String, Http2SolrClient> httpSolrClients = createHttpSolrClients();
+    Map<String, Http2SolrClient> httpSolrClients = createSolrClients();
 
     Map<String, DocCollection> collectionState = solrClient.getClusterState().getCollectionsMap();
 
@@ -85,7 +85,7 @@ public class SolrCloudScraper extends SolrScraper {
         });
   }
 
-  private Map<String, Http2SolrClient> createHttpSolrClients() throws IOException {
+  private Map<String, Http2SolrClient> createSolrClients() throws IOException {
     return getBaseUrls().stream()
         .map(url -> hostClientCache.get(url, solrClientFactory::createStandaloneSolrClient))
         .collect(Collectors.toMap(Http2SolrClient::getBaseURL, Function.identity()));
@@ -106,13 +106,13 @@ public class SolrCloudScraper extends SolrScraper {
 
   @Override
   public Map<String, MetricSamples> metricsForAllHosts(MetricsQuery query) throws IOException {
-    Map<String, Http2SolrClient> httpSolrClients = createHttpSolrClients();
+    Map<String, Http2SolrClient> solrClients = createSolrClients();
 
     return sendRequestsInParallel(
-        httpSolrClients.keySet(),
+        solrClients.keySet(),
         (baseUrl) -> {
           try {
-            return request(httpSolrClients.get(baseUrl), query);
+            return request(solrClients.get(baseUrl), query);
           } catch (IOException exception) {
             throw new RuntimeException(exception);
           }

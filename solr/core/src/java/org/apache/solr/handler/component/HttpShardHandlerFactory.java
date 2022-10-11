@@ -339,7 +339,7 @@ public class HttpShardHandlerFactory extends ShardHandlerFactory
     return solrMetricsContext;
   }
 
-  protected LBSolrClient.Req newLBHttpSolrClientReq(final QueryRequest req, List<String> urls) {
+  protected LBSolrClient.Req newLBSolrClientReq(final QueryRequest req, List<String> urls) {
     int numServersToTry =
         (int) Math.floor(urls.size() * this.permittedLoadBalancerRequestsMaximumFraction);
     if (numServersToTry < this.permittedLoadBalancerRequestsMinimumAbsolute) {

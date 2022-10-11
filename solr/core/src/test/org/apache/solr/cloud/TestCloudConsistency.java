@@ -312,11 +312,11 @@ public class TestCloudConsistency extends SolrCloudTestCase {
       List<Replica> notLeaders, String testCollectionName, int firstDocId, int lastDocId)
       throws Exception {
     Replica leader = cluster.getZkStateReader().getLeaderRetry(testCollectionName, "shard1", 10000);
-    SolrClient leaderSolr = getHttpSolrClient(leader, testCollectionName);
+    SolrClient leaderSolr = getSolrClient(leader, testCollectionName);
     List<SolrClient> replicas = new ArrayList<>(notLeaders.size());
 
     for (Replica r : notLeaders) {
-      replicas.add(getHttpSolrClient(r, testCollectionName));
+      replicas.add(getSolrClient(r, testCollectionName));
     }
     try {
       for (int d = firstDocId; d <= lastDocId; d++) {
@@ -349,9 +349,9 @@ public class TestCloudConsistency extends SolrCloudTestCase {
     return solr.request(qr);
   }
 
-  protected SolrClient getHttpSolrClient(Replica replica, String coll) {
+  protected SolrClient getSolrClient(Replica replica, String coll) {
     ZkCoreNodeProps zkProps = new ZkCoreNodeProps(replica);
     String url = zkProps.getBaseUrl() + "/" + coll;
-    return getHttpSolrClient(url);
+    return getSolrClient(url);
   }
 }

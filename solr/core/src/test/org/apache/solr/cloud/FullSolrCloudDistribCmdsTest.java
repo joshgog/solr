@@ -620,7 +620,7 @@ public class FullSolrCloudDistribCmdsTest extends SolrCloudTestCase {
     return docId;
   }
 
-  public void testIndexingOneDocPerRequestWithHttpSolrClient() throws Exception {
+  public void testIndexingOneDocPerRequestWithSolrClient() throws Exception {
     final CloudSolrClient cloudClient = cluster.getSolrClient();
     final String collectionName = createAndSetNewDefaultCollection();
 
@@ -640,7 +640,7 @@ public class FullSolrCloudDistribCmdsTest extends SolrCloudTestCase {
     checkShardConsistency(params("q", "*:*", "rows", "" + (1 + numDocs), "_trace", "addAll"));
   }
 
-  public void testIndexingBatchPerRequestWithHttpSolrClient() throws Exception {
+  public void testIndexingBatchPerRequestWithSolrClient() throws Exception {
     final CloudSolrClient cloudClient = cluster.getSolrClient();
     final String collectionName = createAndSetNewDefaultCollection();
 

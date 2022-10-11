@@ -219,7 +219,7 @@ public class TestMiniSolrCloudClusterSSL extends SolrTestCaseJ4 {
             expectThrows(
                 SolrServerException.class,
                 () -> {
-                  try (SolrClient client = getRandomizedHttpSolrClient(baseURL)) {
+                  try (SolrClient client = getRandomizedSolrClient(baseURL)) {
                     CoreAdminRequest req = new CoreAdminRequest();
                     req.setAction(CoreAdminAction.STATUS);
                     client.request(req);
@@ -296,7 +296,7 @@ public class TestMiniSolrCloudClusterSSL extends SolrTestCaseJ4 {
    * options (based on the sslConfig), and that we can <b>NOT</b> query the Jetty instances in
    * specified cluster in the ways that should fail (based on the sslConfig)
    *
-   * @see #getRandomizedHttpSolrClient
+   * @see #getRandomizedSolrClient
    */
   private static void checkClusterJettys(
       final MiniSolrCloudCluster cluster, final SSLTestConfig sslConfig) throws Exception {
@@ -312,14 +312,14 @@ public class TestMiniSolrCloudClusterSSL extends SolrTestCaseJ4 {
       assertEquals("http vs https: " + baseURL, ssl ? "https" : "http:", baseURL.substring(0, 5));
 
       // verify solr client success with expected protocol
-      try (SolrClient client = getRandomizedHttpSolrClient(baseURL)) {
+      try (SolrClient client = getRandomizedSolrClient(baseURL)) {
         assertEquals(0, CoreAdminRequest.getStatus(/* all */ null, client).getStatus());
       }
 
       // sanity check the HttpClient used under the hood by our the cluster's CloudSolrClient
       // ensure it has the necessary protocols/credentials for each jetty server
 
-      try (SolrClient client = getRandomizedHttpSolrClient(baseURL)) {
+      try (SolrClient client = getRandomizedSolrClient(baseURL)) {
         assertEquals(0, CoreAdminRequest.getStatus(/* all */ null, client).getStatus());
       }
 
@@ -330,7 +330,7 @@ public class TestMiniSolrCloudClusterSSL extends SolrTestCaseJ4 {
       expectThrows(
           SolrServerException.class,
           () -> {
-            try (SolrClient client = getRandomizedHttpSolrClient(wrongBaseURL)) {
+            try (SolrClient client = getRandomizedSolrClient(wrongBaseURL)) {
               CoreAdminRequest req = new CoreAdminRequest();
               req.setAction(CoreAdminAction.STATUS);
               client.request(req);
@@ -421,7 +421,7 @@ public class TestMiniSolrCloudClusterSSL extends SolrTestCaseJ4 {
    *
    * @see #getHttpSolrClient
    */
-  public static SolrClient getRandomizedHttpSolrClient(String url) {
+  public static SolrClient getRandomizedSolrClient(String url) {
     // NOTE: at the moment, SolrTestCaseJ4 already returns "new HttpSolrClient" most of the time,
     // so this method may seem redundant -- but the point here is to sanity check 2 things:
     // 1) a direct test that "new HttpSolrClient" works given the current JVM/sysprop defaults
@@ -433,6 +433,6 @@ public class TestMiniSolrCloudClusterSSL extends SolrTestCaseJ4 {
     if (random().nextBoolean()) {
       return (new HttpSolrClient.Builder(url)).build();
     } // else...
-    return getHttpSolrClient(url);
+    return getSolrClient(url);
   }
 }
